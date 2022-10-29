@@ -10,4 +10,4 @@ import os
 
 #%% DATA IMPORT
 
-df = pd.read_csv("projet_tutore_biostat/expression_data_tsg3_3686_samples_20982_genes__head.csv")
+df = pd.read_csv("expression_data_tsg3_3686_samples_20982_genes__head.csv")
