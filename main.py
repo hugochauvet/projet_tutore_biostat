@@ -19,6 +19,10 @@ path = "C:/Users/33638/Documents/MasterSSD/M1/S7/Projet_biostat/"
 df_head = pd.read_csv(path + "expression_data_tsg3_3686_samples_20982_genes__head.csv", sep = ";")
 print(df_head)
 
+#%% DATA CANCER
+df_tissue_group = pd.read_csv(path + "expression_data_tcga_brca_TCGA-BRCA_log_fpkm_1250_samples_41779_genes.csv", sep = ";")
+print(df_tissue_group)
+
 #%% DATA TISSUE
 df_tissue = pd.read_csv(path + "Tissue_specific_genes.csv", sep = ";")
 df_tissue["id_gene"].round(0)
