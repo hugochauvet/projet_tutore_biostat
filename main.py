@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import os
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 #%%###########################################################################
 ##### DATA IMPORT
@@ -15,25 +16,10 @@ import matplotlib.pyplot as plt
 
 path = "C:/Users/33638/Documents/MasterSSD/M1/S7/Projet_biostat/"
 
-#%% DATA HEAD
-df_head = pd.read_csv(path + "expression_data_tsg3_3686_samples_20982_genes__head.csv", sep = ";")
-print(df_head)
-
 #%% DATA TARGET
 df_target = pd.read_csv(path + "expression_data_tsg3_3686_samples_20982_genes__targets.csv", sep = ";")
 print(df_target)
 print(df_target.columns)
-#%% DATA CANCER
-df_tissue_group = pd.read_csv(path + "expression_data_tcga_brca_TCGA-BRCA_log_fpkm_1250_samples_41779_genes.csv", sep = ";")
-print(df_tissue_group)
-
-#%% DATA TISSUE
-df_tissue = pd.read_csv(path + "Tissue_specific_genes.csv", sep = ";")
-df_tissue["id_gene"].round(0)
-print(df_tissue)
-print(df_tissue.columns)
-print(df_tissue.loc[:, "tissue_L1"])
-print(df_tissue.loc[:, "SNR_L1"])
 
 #%% COMPLETE DATA
 df_tsg3 = pd.read_csv(path + "expression_data_tsg3_3686_samples_20982_genes.csv", sep = ";")
@@ -57,10 +43,20 @@ test_gene1 = test_gene1.drop(['gene_symbols', 'id_gene'])
 test_gene1.set_axis(['values', 'tissue'], axis=1, inplace = True)
 test_gene1 = test_gene1.astype({'values': 'float'})
 test_gene1_group = test_gene1.groupby('tissue')['values'].mean()
+max_value = test_gene1_group.nlargest(2)[0]
+second_value = test_gene1_group.nlargest(2)[1]
+SNR = round(max_value / second_value, 3)
+df_gene_plot = test_gene1_group.reset_index(level=0)
 
-plt.bar(test_gene1_group.index, test_gene1_group.values)
-plt.xticks(range(len(test_gene1_group.index)), test_gene1_group.index, rotation=90)
-plt.title(gene)
+
+# BARPLOT
+col_bar = ['grey' if x < max_value else 'red' for x in df_gene_plot['values']]
+ax = sns.barplot(data = df_gene_plot, x = "tissue", y = "values", palette = col_bar)
+ax.tick_params(axis = 'x', rotation = 90)
+ax.set_title(gene)
+col_SNR = 'red' if SNR >= 3 else 'black'
+ax.text(0.05, max_value*0.95, 'SNR = ' + str(SNR), fontsize = 16, color = col_SNR)
+
 
 
 
