@@ -40,7 +40,7 @@ def gene_expr_tissue(gene, df_merge):
     test_gene1 = test_gene1.drop(['gene_symbols', 'id_gene'])
     test_gene1.set_axis(['values', 'tissue'], axis=1, inplace = True)
     test_gene1 = test_gene1.astype({'values': 'float'})
-    test_gene1_group = test_gene1.groupby('tissue')['values'].mean()
+    test_gene1_group = test_gene1.groupby('tissue')['values'].mean() # mean normal expression
     max_value = test_gene1_group.nlargest(2)[0]
     second_value = test_gene1_group.nlargest(2)[1]
     SNR = round(max_value / second_value, 3)
@@ -64,6 +64,7 @@ df_tsg3 = load_data_tsg3(path)
 df_merge = merge_tsg3_target(df_tsg3, df_target)
 
 #%% EX4.1
+print(df_merge['gene_symbols'])
 gene_expr_tissue('CCDC158', df_merge)
 
 
