@@ -45,6 +45,11 @@ def gene_expr_tissue(gene, df_merge):
     second_value = test_gene1_group.nlargest(2)[1]
     SNR = round(max_value / second_value, 3)
     df_gene_plot = test_gene1_group.reset_index(level=0)
+    breast_index = df_gene_plot[df_gene_plot['tissue'] == 'breast']
+    breast_value = breast_index.iloc[0,1]
+    #print(breast_value)
+    SRR = round(max_value / breast_value, 3)
+    #print(SRR)
     # BARPLOT
     col_bar = ['grey' if x < max_value else 'red' if SNR > 3 else 'blue' for x in df_gene_plot['values']]
     ax = sns.barplot(data = df_gene_plot, x = "tissue", y = "values", palette = col_bar)
@@ -52,6 +57,8 @@ def gene_expr_tissue(gene, df_merge):
     ax.set_title(gene)
     col_SNR = 'red' if SNR >= 3 else 'black'
     ax.text(0.05, max_value*0.95, 'SNR = ' + str(SNR), fontsize = 16, color = col_SNR)
+    col_SRR = 'red' if SRR >= 3 else 'black'
+    ax.text(0.05, max_value*0.88, 'SRR = ' + str(SRR), fontsize = 16, color = col_SRR)
 
 #%%###########################################################################
 ##### MAIN
@@ -65,7 +72,7 @@ df_merge = merge_tsg3_target(df_tsg3, df_target)
 
 #%% EX4.1
 print(df_merge['gene_symbols'])
-gene_expr_tissue('CCDC158', df_merge)
+gene_expr_tissue('A1BG', df_merge)
 
 
 
